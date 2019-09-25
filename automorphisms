@@ -1,0 +1,28 @@
+n := 15;     //Modulus, order of cyclic group
+M := [4, 11];   //generating set of automorphism subgroup, must consist of integer coprime to n
+
+////////////////////////////////////   Construct Subgroup generated M ////////////////////////////////
+SubCycGp := function(m, n)
+    return {Modexp(m, k, n)  : k in [0..n-1]};
+end function;
+
+ProdGp :=function(H, K, n)
+    return { (h*k) mod n : h in H, k in K};
+end function;
+
+h :=[];
+for i := 1 to #M do
+    h[i] := SubCycGp(M[i], n); 
+end for;
+
+H := h[1];
+if (#M gt 1) then
+    for i := 2 to #M do
+        H := ProdGp(H, h[i],n);
+    end for;
+end if;
+
+"H =", H;
+
+////////////////////////////////////   Construct S-ring /////////////////////////////////////////////////
+S := { {(k*h) mod n : h in H} : k in [0..n-1]}; "S =", S;
